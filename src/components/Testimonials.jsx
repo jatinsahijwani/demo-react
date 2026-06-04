@@ -1,37 +1,74 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { Star, Quote } from "lucide-react";
 
 export default function Testimonials() {
   const testimonialsData = [
-    { name: 'Rahul Sharma', text: 'Prashant Telecom arranged our Maldives trip flawlessly. 5-star service all the way!', rating: 5 },
-    { name: 'Priya Patel', text: 'The customized family package to Kerala was affordable yet highly premium. Highly recommended.', rating: 5 },
-    { name: 'Amit Singh', text: 'Quick flight and hotel bookings. Praphull is incredibly helpful and professional.', rating: 5 },
+    {
+      name: "Rahul Sharma",
+      role: "Maldives Getaway",
+      text: "Prashant Telecom arranged our Maldives trip flawlessly. 5-star service all the way!",
+      rating: 5,
+    },
+    {
+      name: "Priya Patel",
+      role: "Kerala Family Tour",
+      text: "The customized family package to Kerala was affordable yet highly premium. Highly recommended.",
+      rating: 5,
+    },
+    {
+      name: "Amit Singh",
+      role: "Flights & Hotels",
+      text: "Quick flight and hotel bookings. Praphull is incredibly helpful and professional.",
+      rating: 5,
+    },
   ];
 
   return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <h2 className="text-4xl md:text-5xl font-bold text-center text-[#062B3D] mb-16">What Our Travelers Say</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <section className="bg-white py-24 md:py-32">
+      <div className="shell">
+        <div className="mx-auto mb-16 max-w-2xl text-center">
+          <span className="eyebrow justify-center">Loved by travellers</span>
+          <h2 className="mt-5 font-display text-4xl font-semibold text-ink md:text-5xl">
+            What our travellers say
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-3">
           {testimonialsData.map((test, idx) => (
-            <motion.div 
+            <motion.figure
               key={idx}
-              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: idx * 0.2 }}
-              className="p-8 bg-[#F8FBFD] rounded-2xl border border-[#EDF4F7] shadow-lg hover:shadow-xl transition-shadow relative"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.15 }}
+              className="relative flex flex-col rounded-3xl border border-sand bg-cream p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="flex text-[#FF7A1A] mb-6">
-                {[...Array(test.rating)].map((_, i) => <Star key={i} size={20} fill="currentColor" />)}
+              <Quote
+                size={44}
+                className="absolute right-7 top-7 text-cyan-deep/15"
+                fill="currentColor"
+              />
+              <div className="mb-5 flex gap-1 text-amber">
+                {[...Array(test.rating)].map((_, i) => (
+                  <Star key={i} size={18} fill="currentColor" />
+                ))}
               </div>
-              <p className="text-gray-600 mb-6 italic text-lg leading-relaxed">"{test.text}"</p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#05B7D8] rounded-full flex items-center justify-center text-white font-bold text-xl">
+              <blockquote className="flex-grow font-display text-lg italic leading-relaxed text-ink/80">
+                "{test.text}"
+              </blockquote>
+              <figcaption className="mt-7 flex items-center gap-4 border-t border-sand pt-6">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-deep to-teal text-lg font-bold text-white">
                   {test.name.charAt(0)}
-                </div>
-                <h4 className="font-bold text-[#062B3D]">{test.name}</h4>
-              </div>
-            </motion.div>
+                </span>
+                <span>
+                  <span className="block font-semibold text-ink">
+                    {test.name}
+                  </span>
+                  <span className="block text-sm text-ink/50">{test.role}</span>
+                </span>
+              </figcaption>
+            </motion.figure>
           ))}
         </div>
       </div>

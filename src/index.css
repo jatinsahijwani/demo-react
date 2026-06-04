@@ -1,7 +1,26 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   Global base
+   Design tokens — Prashant Telecom "Ocean Luxury" travel system
+   Deep teal anchor, cyan light, warm amber accent, soft cream surfaces.
+   ========================================================================== */
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+
+  --color-ink: #062b3d; /* brand deepest — text & dark sections */
+  --color-ink-deep: #041d29; /* footer / darkest */
+  --color-teal: #0a4d68; /* mid teal */
+  --color-cyan: #18d8ff; /* bright accent */
+  --color-cyan-deep: #05b7d8; /* secondary accent */
+  --color-amber: #ff7a1a; /* warm CTA accent */
+  --color-amber-deep: #e96b13; /* CTA hover */
+  --color-cream: #f6fafb; /* soft light surface */
+  --color-sand: #eef5f7; /* light borders / fills */
+}
+
+/* ==========================================================================
+   Base
    ========================================================================== */
 html {
   scroll-behavior: smooth;
@@ -9,11 +28,26 @@ html {
 
 body {
   margin: 0;
-  background-color: #062b3d;
-  color: #062b3d;
+  background-color: var(--color-ink);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-cyan);
+  color: var(--color-ink);
+}
+
+/* Display headings carry the serif voice site-wide */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* Offset anchor jumps so the fixed navbar doesn't cover section headings */
@@ -21,42 +55,138 @@ section[id] {
   scroll-margin-top: 90px;
 }
 
-/* ==========================================================================
-   Custom design utilities used throughout the site
-   ========================================================================== */
-
-/* Dark luxury background — Services section, etc. */
-.luxury-gradient {
-  background: linear-gradient(135deg, #062b3d 0%, #0a4d68 55%, #041d29 100%);
+/* Slimmer, branded scrollbar for the horizontal sliders */
+.no-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(5, 183, 216, 0.4);
+  border-radius: 9999px;
+}
+.no-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-/* Glassmorphism card for use on dark backgrounds (cards, forms) */
+/* ==========================================================================
+   Layout + component utilities (the shared design language)
+   ========================================================================== */
+@layer components {
+  /* One container width everywhere for a consistent rhythm */
+  .shell {
+    @apply mx-auto w-full max-w-7xl px-6 md:px-10;
+  }
+
+  /* Eyebrow label that sits above every section heading */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-deep;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-px w-8 bg-cyan-deep/60;
+  }
+  .eyebrow-dark {
+    @apply text-cyan;
+  }
+  .eyebrow-dark::before {
+    @apply bg-cyan/50;
+  }
+
+  /* Buttons — shared base + variants so every CTA stays identical.
+     Base lives in plain CSS so variants can opt in without @apply chaining. */
+  .btn,
+  .btn-primary,
+  .btn-cyan,
+  .btn-ghost,
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.875rem 1.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+    transition: all 0.3s ease;
+  }
+  .btn-primary {
+    @apply bg-amber text-white shadow-[0_10px_30px_-8px_rgba(255,122,26,0.6)] hover:bg-amber-deep hover:-translate-y-0.5;
+  }
+  .btn-cyan {
+    @apply bg-cyan text-ink shadow-[0_10px_30px_-8px_rgba(24,216,255,0.6)] hover:bg-cyan-deep hover:-translate-y-0.5;
+  }
+  .btn-ghost {
+    @apply border border-white/30 bg-white/10 text-white backdrop-blur-md hover:bg-white/20;
+  }
+  .btn-outline {
+    @apply border border-ink/15 bg-white text-ink hover:border-ink/40 hover:-translate-y-0.5;
+  }
+}
+
+/* ==========================================================================
+   Surfaces & atmosphere
+   ========================================================================== */
+
+/* Dark luxury background with a soft cyan glow — dark sections */
+.luxury-gradient {
+  background:
+    radial-gradient(
+      60% 80% at 80% 0%,
+      rgba(5, 183, 216, 0.16) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      50% 60% at 0% 100%,
+      rgba(255, 122, 26, 0.1) 0%,
+      transparent 55%
+    ),
+    linear-gradient(140deg, #062b3d 0%, #0a4d68 55%, #041d29 100%);
+}
+
+/* Glassmorphism card for dark backgrounds (cards, forms) */
 .glass-card {
-  background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.5);
 }
 
 /* Frosted navbar applied once the page is scrolled */
 .glass-nav {
-  background: rgba(6, 43, 61, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(6, 43, 61, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Cyan → orange gradient text accent (Hero heading) */
+/* Cyan → amber gradient text accent (hero / display words) */
 .text-gradient {
-  background: linear-gradient(90deg, #18d8ff 0%, #05b7d8 45%, #ff7a1a 100%);
+  background: linear-gradient(95deg, #18d8ff 0%, #05b7d8 42%, #ff7a1a 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
-/* Slow ken-burns zoom for the hero background image */
+/* Reusable dark image overlay for hero banners (consistent across pages) */
+.hero-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(6, 43, 61, 0.55) 0%,
+    rgba(6, 43, 61, 0.45) 40%,
+    rgba(4, 29, 41, 0.92) 100%
+  );
+}
+
+/* Thin uppercase tracked label used inside dark cards */
+.kicker {
+  @apply text-[11px] font-semibold uppercase tracking-[0.22em];
+}
+
+/* ==========================================================================
+   Motion
+   ========================================================================== */
 @keyframes pulse-slow {
   0%,
   100% {
@@ -66,17 +196,29 @@ section[id] {
     transform: scale(1.13);
   }
 }
-
 .animate-pulse-slow {
-  animation: pulse-slow 14s ease-in-out infinite;
+  animation: pulse-slow 18s ease-in-out infinite;
 }
 
-/* Respect users who prefer reduced motion */
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.animate-float-soft {
+  animation: float-soft 6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .animate-pulse-slow {
+  .animate-pulse-slow,
+  .animate-float-soft {
     animation: none;
   }
 }

@@ -1,80 +1,7 @@
-// components/Navbar.jsx
-/*
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Menu, X, Plane } from 'lucide-react';
-
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <motion.nav 
-      initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass-nav py-3 shadow-lg' : 'bg-transparent py-5'}`}
-    >
-      <div className="container mx-auto px-4 max-w-7xl flex justify-between items-center">
-        
-            // Logo 
-        <div className="flex items-center gap-2 text-white cursor-pointer group">
-          <div className="w-10 h-10 bg-[#FF7A1A] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Plane size={24} className="text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-2xl font-bold leading-none tracking-wide">Prashant Telecom</span>
-            <span className="text-xs text-[#18D8FF] tracking-widest uppercase">Travel & Tour</span>
-          </div>
-        </div>
-
-           // Desktop Links 
-        <ul className="hidden lg:flex items-center gap-8 text-white font-medium">
-          {['Home', 'About', 'Services', 'Testimonials', 'Gallery', 'Contact'].map((item) => (
-            <li key={item} className="relative group cursor-pointer hover:text-[#18D8FF] transition-colors">
-              {item}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#18D8FF] transition-all duration-300 group-hover:w-full"></span>
-            </li>
-          ))}
-        </ul>
-
-         // CTA 
-        <button className="hidden lg:block px-6 py-2.5 bg-[#FF7A1A] hover:bg-[#e66a15] text-white rounded-full font-semibold transition-all duration-300 shadow-[0_4px_14px_rgba(255,122,26,0.4)] hover:-translate-y-1">
-          Get Travel Quote
-        </button>
-
-         // Mobile Toggle 
-        <button className="lg:hidden text-white" onClick={() => setMobileMenu(!mobileMenu)}>
-          {mobileMenu ? <X size={32} /> : <Menu size={32} />}
-        </button>
-      </div>
-
-        // Mobile Menu 
-      {mobileMenu && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-[#062B3D] border-t border-white/10 p-6 flex flex-col gap-4 shadow-2xl">
-          {['Home', 'About', 'Services', 'Testimonials', 'Gallery', 'Contact'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="text-white text-lg font-medium border-b border-white/10 pb-2">
-              {item}
-            </a>
-          ))}
-          <button className="mt-4 px-6 py-3 bg-[#FF7A1A] text-white rounded-lg font-bold">
-            Get Travel Quote
-          </button>
-        </div>
-      )}
-    </motion.nav>
-  );
-}
-  */
-
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Menu, X, Plane } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Menu, X, Plane } from "lucide-react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -82,78 +9,116 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close the mobile sheet whenever the route changes
+  useEffect(() => setMobileMenu(false), [location.pathname]);
+
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Inquiry', path: '/inquiry' },
-    { name: 'Contact', path: '/contact' }
+    { name: "Home", path: "/" },
+    { name: "Destination", path: "/destination" },
+    { name: "Blogs", path: "/blogs" },
+    { name: "Contact", path: "/contact" },
   ];
 
-  // Only the Home page has a dark hero behind the navbar, so a transparent
-  // bar is only safe there. Every other route has a light background and
-  // needs a solid/frosted bar so the white text stays visible.
-  const isHome = location.pathname === '/';
+  const isHome = location.pathname === "/";
+  // Solid bar everywhere except the top of the home hero
+  const solid = scrolled || !isHome;
 
   return (
     <motion.nav
-      initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled || !isHome ? 'glass-nav py-3 shadow-lg' : 'bg-[#062B3D] lg:bg-transparent py-5'}`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
+        solid ? "glass-nav py-3.5 shadow-lg shadow-ink/20" : "bg-transparent py-5"
+      }`}
     >
-      <div className="container mx-auto px-4 max-w-7xl flex justify-between items-center">
-        
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 text-white cursor-pointer group">
-          <div className="w-10 h-10 bg-[#FF7A1A] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Plane size={24} className="text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-2xl font-bold leading-none tracking-wide">Prashant Telecom</span>
-            <span className="text-xs text-[#18D8FF] tracking-widest uppercase">Travel & Tour</span>
-          </div>
+      <div className="shell flex items-center justify-between">
+        {/* LOGO */}
+        <Link to="/" className="group flex items-center gap-3 text-white">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber shadow-[0_8px_20px_-6px_rgba(255,122,26,0.7)] transition-transform duration-300 group-hover:-rotate-12">
+            <Plane size={22} className="text-white" />
+          </span>
+          <span className="leading-none">
+            <span className="block font-display text-xl font-semibold tracking-tight md:text-2xl">
+              Prashant Telecom
+            </span>
+            <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.34em] text-cyan">
+              Travel &amp; Tour
+            </span>
+          </span>
         </Link>
 
-        {/* Desktop Links */}
-        <ul className="hidden lg:flex items-center gap-8 text-white font-medium">
-          {navLinks.map((item) => (
-            <li key={item.name} className="relative group cursor-pointer hover:text-[#18D8FF] transition-colors">
-              <Link to={item.path}>{item.name}</Link>
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-[#18D8FF] transition-all duration-300 ${location.pathname === item.path ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-            </li>
-          ))}
+        {/* DESKTOP MENU */}
+        <ul className="hidden items-center gap-10 text-sm font-medium text-white/90 lg:flex">
+          {navLinks.map((item) => {
+            const active = location.pathname === item.path;
+            return (
+              <li key={item.name} className="group relative">
+                <Link
+                  to={item.path}
+                  className={`transition-colors duration-300 hover:text-cyan ${
+                    active ? "text-cyan" : ""
+                  }`}
+                >
+                  {item.name}
+                </Link>
+                <span
+                  className={`absolute -bottom-2 left-0 h-[2px] rounded-full bg-cyan transition-all duration-300 ${
+                    active ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </li>
+            );
+          })}
         </ul>
 
         {/* CTA */}
-        <Link to="/inquiry" className="hidden lg:block px-6 py-2.5 bg-[#FF7A1A] hover:bg-[#e66a15] text-white rounded-full font-semibold transition-all duration-300 shadow-[0_4px_14px_rgba(255,122,26,0.4)] hover:-translate-y-1">
+        <Link to="/inquiry" className="btn-primary hidden lg:inline-flex">
           Get Travel Quote
         </Link>
 
-        {/* Mobile Toggle */}
-        <button className="lg:hidden text-white" onClick={() => setMobileMenu(!mobileMenu)}>
-          {mobileMenu ? <X size={32} /> : <Menu size={32} />}
+        {/* MOBILE TOGGLE */}
+        <button
+          aria-label="Toggle menu"
+          className="text-white lg:hidden"
+          onClick={() => setMobileMenu((v) => !v)}
+        >
+          {mobileMenu ? <X size={30} /> : <Menu size={30} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       {mobileMenu && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-[#062B3D] border-t border-white/10 p-6 flex flex-col gap-4 shadow-2xl">
-          {navLinks.map((item) => (
-            <Link 
-              key={item.name} 
-              to={item.path} 
-              onClick={() => setMobileMenu(false)}
-              className="text-white text-lg font-medium border-b border-white/10 pb-2"
-            >
-              {item.name}
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="border-t border-white/10 bg-ink/95 backdrop-blur-lg lg:hidden"
+        >
+          <div className="shell flex flex-col gap-1 py-5">
+            {navLinks.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`border-b border-white/10 py-3 text-base font-medium transition-colors ${
+                  location.pathname === item.path
+                    ? "text-cyan"
+                    : "text-white hover:text-cyan"
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <Link to="/inquiry" className="btn-primary mt-5 w-full">
+              Get Travel Quote
             </Link>
-          ))}
-          <Link to="/inquiry" onClick={() => setMobileMenu(false)} className="mt-4 text-center px-6 py-3 bg-[#FF7A1A] text-white rounded-lg font-bold">
-            Get Travel Quote
-          </Link>
-        </div>
+          </div>
+        </motion.div>
       )}
     </motion.nav>
   );

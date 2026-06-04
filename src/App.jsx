@@ -1,26 +1,10 @@
-/* import { useState } from 'react'
-//import Header from './components/header'
-import Navbar from './components/navbar'
-import Hero from './components/Hero'
-//import Footer from './components/footer'
-import './App.css'
-
-function App() {
-
-  return (
-    <>
-      <Navbar/>
-      <Hero />
-    </>
-  )
-}
-
-export default App */
-
-
-
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import StickyButtons from './components/StickyButtons';
@@ -29,17 +13,31 @@ import StickyButtons from './components/StickyButtons';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import Inquiry from './pages/Inquiry';
+import BlogSection from './pages/Blogs';
+import Destination from './pages/Destination';
+
+// Reset scroll position on every route change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
 
 export default function App() {
   return (
     <Router>
-      <div className="relative min-h-screen flex flex-col">
+      <ScrollToTop />
+      <div className="relative flex min-h-screen flex-col bg-cream">
         <Navbar />
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/destination" element={<Destination />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/inquiry" element={<Inquiry />} />
+            <Route path="/blogs" element={<BlogSection />} />
           </Routes>
         </main>
         <Footer />
